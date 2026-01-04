@@ -21,7 +21,12 @@
         <justauth.version>1.16.6</justauth.version>
     </properties>
 
-
+    <distributionManagement>
+        <repository>
+            <id>github</id>
+            <url>https://maven.pkg.github.com/mybsam12138/justauth-oauth-spring-boot-starter</url>
+        </repository>
+    </distributionManagement>
 
     <dependencyManagement>
         <dependencies>
