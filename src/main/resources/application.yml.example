@@ -1,0 +1,29 @@
+# JustAuth OAuth Configuration Example
+justauth:
+  oauth:
+    base-url: http://localhost:8080
+    google:
+      enabled: true
+      client-id: YOUR_GOOGLE_CLIENT_ID
+      client-secret: YOUR_GOOGLE_CLIENT_SECRET
+      redirect-uri: http://localhost:8080/oauth/callback/google
+    twitter:
+      enabled: true
+      client-id: YOUR_TWITTER_API_KEY
+      client-secret: YOUR_TWITTER_API_SECRET
+      redirect-uri: http://localhost:8080/oauth/callback/twitter
+
+# Spring Redis Configuration
+spring:
+  redis:
+    host: localhost
+    port: 6379
+    password: # Optional
+    database: 0
+    timeout: 2000ms
+    lettuce:
+      pool:
+        max-active: 8
+        max-idle: 8
+        min-idle: 0
+
