@@ -6,7 +6,7 @@ import me.zhyd.oauth.request.AuthRequest;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
-@Service("OAUTH_FACEBOOK")
+@Service()
 public class FacebookOauthService extends AbstractOauth2Template{
 
     public FacebookOauthService(Map<String, AuthRequest> authRequestMap,
