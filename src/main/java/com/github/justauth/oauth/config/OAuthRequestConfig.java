@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import lombok.RequiredArgsConstructor;
 import me.zhyd.oauth.config.AuthConfig;
 import me.zhyd.oauth.request.AuthFacebookRequest;
+import me.zhyd.oauth.request.AuthGiteeRequest;
 import me.zhyd.oauth.request.AuthGithubRequest;
 import me.zhyd.oauth.request.AuthGoogleRequest;
 import me.zhyd.oauth.request.AuthRequest;
@@ -72,6 +73,21 @@ public class OAuthRequestConfig {
         validScopes.add("public_profile");
 
         return new AuthGithubRequest(AuthConfig.builder()
+                .clientId(cfg.getClientId())
+                .clientSecret(cfg.getClientSecret())
+                .redirectUri(cfg.getRedirectUri())
+                .scopes(validScopes)
+                .build());
+    }
+
+    @Bean("OAUTH_GITEE")
+    @ConditionalOnProperty(prefix = "oauth.providers.oauth_gitee", name = "client-id")
+    public AuthRequest getOauthGiteeRequest() {
+        OAuthProviderProperties cfg = props.getProviders().get(OAuthProvider.OAUTH_GITEE);
+        ArrayList<String> validScopes = new ArrayList<>();
+        validScopes.add("public_profile");
+
+        return new AuthGiteeRequest(AuthConfig.builder()
                 .clientId(cfg.getClientId())
                 .clientSecret(cfg.getClientSecret())
                 .redirectUri(cfg.getRedirectUri())

@@ -7,6 +7,7 @@ public enum OAuthProvider {
     OAUTH_GOOGLE,
     OAUTH_TWITTER,
     OAUTH_FACEBOOK,
-    OAUTH_GITHUB;
+    OAUTH_GITHUB,
+    OAUTH_GITEE;
 }
 
