@@ -7,7 +7,7 @@
 
     <groupId>com.github</groupId>
     <artifactId>justauth-oauth-spring-boot-starter</artifactId>
-    <version>1.0.7</version>
+    <version>1.0.8</version>
     <packaging>jar</packaging>
 
     <name>JustAuth OAuth Spring Boot Starter</name>

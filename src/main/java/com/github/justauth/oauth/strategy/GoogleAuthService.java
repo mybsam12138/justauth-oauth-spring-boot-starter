@@ -6,7 +6,7 @@ import me.zhyd.oauth.request.AuthRequest;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
-@Service()
+@Service
 public class GoogleAuthService extends AbstractOauth2Template{
 
     public GoogleAuthService(Map<String, AuthRequest> authRequestMap,

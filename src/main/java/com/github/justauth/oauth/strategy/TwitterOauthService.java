@@ -4,7 +4,9 @@ import com.github.justauth.oauth.enums.OAuthProvider;
 import java.util.Map;
 import me.zhyd.oauth.request.AuthRequest;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.stereotype.Service;
 
+@Service
 public class TwitterOauthService extends AbstractOauth1Template{
 
     public TwitterOauthService(Map<String, AuthRequest> authRequestMap,
