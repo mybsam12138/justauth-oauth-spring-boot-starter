@@ -6,6 +6,7 @@ package com.github.justauth.oauth.enums;
 public enum OAuthProvider {
     OAUTH_GOOGLE,
     OAUTH_TWITTER,
-    OAUTH_FACEBOOK;
+    OAUTH_FACEBOOK,
+    OAUTH_GITHUB;
 }
 
