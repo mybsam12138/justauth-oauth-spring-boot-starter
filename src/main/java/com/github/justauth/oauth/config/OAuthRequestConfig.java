@@ -85,7 +85,6 @@ public class OAuthRequestConfig {
     public AuthRequest getOauthGiteeRequest() {
         OAuthProviderProperties cfg = props.getProviders().get(OAuthProvider.OAUTH_GITEE);
         ArrayList<String> validScopes = new ArrayList<>();
-        validScopes.add("public_profile");
 
         return new AuthGiteeRequest(AuthConfig.builder()
                 .clientId(cfg.getClientId())
