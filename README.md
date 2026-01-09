@@ -1,219 +1,243 @@
-# JustAuth OAuth Spring Boot Starter
+# justauth-oauth-spring-boot-starter
 
-A Spring Boot starter for OAuth authentication using JustAuth library. This starter provides a common Maven package that can be used as a dependency in other Java applications. It implements the Strategy design pattern to support multiple OAuth providers (Google OAuth 2.0 and Twitter OAuth 1.0) and uses Redis for token and state verification.
+A **Spring Boot starter** that adds **first-class Spring Boot configuration and framework support** on top of **JustAuth**.
 
-## Features
+> **Primary Motivation**  
+> JustAuth is a powerful OAuth library, but **it does not natively support Spring Boot configuration, auto-configuration, or framework-level extension**.  
+>  
+> This project exists to **bridge that gap**.
 
-- ✅ **Strategy Design Pattern**: Clean architecture for OAuth provider implementations
-- ✅ **Multiple OAuth Providers**: 
-  - Google (OAuth 2.0)
-  - Twitter (OAuth 1.0)
-- ✅ **Redis Integration**: Token and state verification using Redis
-- ✅ **Auto-Configuration**: Spring Boot auto-configuration for easy setup
-- ✅ **RESTful API**: Ready-to-use REST endpoints for OAuth flow
+---
 
-## Requirements
+## 🎯 Why This Starter Exists (The Real Reason)
 
-- Java 8+
-- Spring Boot 2.7.x
-- Redis (for token/state storage)
+**JustAuth focuses on OAuth capability**, but:
 
-## Installation
+- ❌ No Spring Boot `application.yml` configuration binding
+- ❌ No auto-configuration
+- ❌ No provider lifecycle managed by Spring
+- ❌ No framework-level extension model
+- ❌ OAuth1 / OAuth2 logic mixed at usage level
 
-### Maven
+As a result, in Spring Boot projects, developers often end up with:
 
-Add the following dependency to your `pom.xml`:
+- Manually constructed `AuthRequest` objects
+- Provider logic scattered across services
+- Conditional logic (`if / switch`) per provider
+- Poor extensibility when adding new providers
 
-```xml
-<dependency>
-    <groupId>com.github</groupId>
-    <artifactId>justauth-oauth-spring-boot-starter</artifactId>
-    <version>1.0.0</version>
-</dependency>
+### This starter solves that problem.
+
+> **It turns JustAuth from a library into a Spring Boot–friendly framework.**
+
+---
+
+## 🧠 Design Philosophy
+
+This project is designed as a **framework**, not a utility.
+
+Key goals:
+
+- Make JustAuth **configuration-driven**
+- Integrate cleanly with **Spring Boot auto-configuration**
+- Enforce correct OAuth flow by design
+- Allow new providers to be added **without modifying existing code**
+
+---
+
+## 🏗️ Core Architecture
+
+```
+Spring Boot Configuration (application.yml)
+        ↓
+@ConfigurationProperties (OAuthProperties)
+        ↓
+Auto-Configuration
+        ↓
+OAuthStrategyFactory
+        ↓
+OAuthCommonService   ← Strategy abstraction
+        ↑
+AbstractOauthService        ← Template Method
+        ↑
+AbstractOauth1Service      AbstractOauth2Service
+        ↑
+Concrete Provider Services (Google / GitHub / ...)
 ```
 
-## Configuration
+---
 
-Add the following configuration to your `application.yml` or `application.properties`:
+## ⚙️ Spring Boot Configuration Support (Key Feature)
 
-### application.yml
+This starter introduces **native Spring Boot configuration support** for JustAuth.
 
 ```yaml
 justauth:
   oauth:
-    base-url: http://localhost:8080
     google:
-      enabled: true
-      client-id: YOUR_GOOGLE_CLIENT_ID
-      client-secret: YOUR_GOOGLE_CLIENT_SECRET
-      redirect-uri: http://localhost:8080/oauth/callback/google
-    twitter:
-      enabled: true
-      client-id: YOUR_TWITTER_API_KEY
-      client-secret: YOUR_TWITTER_API_SECRET
-      redirect-uri: http://localhost:8080/oauth/callback/twitter
-
-spring:
-  redis:
-    host: localhost
-    port: 6379
-    password: # Optional
-    database: 0
+      client-id: xxx
+      client-secret: xxx
+      redirect-uri: /oauth/callback/google
+    github:
+      client-id: xxx
+      client-secret: xxx
+      redirect-uri: /oauth/callback/github
 ```
 
-### application.properties
+### What this enables
 
-```properties
-justauth.oauth.base-url=http://localhost:8080
-justauth.oauth.google.enabled=true
-justauth.oauth.google.client-id=YOUR_GOOGLE_CLIENT_ID
-justauth.oauth.google.client-secret=YOUR_GOOGLE_CLIENT_SECRET
-justauth.oauth.google.redirect-uri=http://localhost:8080/oauth/callback/google
+- No manual `AuthRequest` construction
+- No hard-coded provider configuration
+- Environment-based configuration (dev / prod)
+- Providers enabled or disabled via config
 
-justauth.oauth.twitter.enabled=true
-justauth.oauth.twitter.client-id=YOUR_TWITTER_API_KEY
-justauth.oauth.twitter.client-secret=YOUR_TWITTER_API_SECRET
-justauth.oauth.twitter.redirect-uri=http://localhost:8080/oauth/callback/twitter
+---
 
-spring.redis.host=localhost
-spring.redis.port=6379
-spring.redis.database=0
-```
+## 🔌 How Configuration Becomes Behavior
 
-## Usage
+1. Configuration is bound via `@ConfigurationProperties`
+2. Auto-configuration creates provider services
+3. Each provider service receives **only its own config**
+4. All providers are registered as Spring beans
+5. `OAuthStrategyFactory` resolves the correct strategy at runtime
 
-### 1. Get Authorization URL
+> **Configuration decides what exists,  
+> Factory decides what is used.**
 
-Initiate OAuth login by getting the authorization URL:
+---
 
-```bash
-GET /oauth/authorize/{provider}
-```
+## 🧩 Strategy Pattern — Provider as Strategy
 
-**Example:**
-```bash
-curl http://localhost:8080/oauth/authorize/google
-```
+Each OAuth provider is implemented as a **strategy service**.
 
-**Response:**
-```json
-{
-  "authorizationUrl": "https://accounts.google.com/o/oauth2/v2/auth?..."
-}
-```
-
-### 2. Handle OAuth Callback
-
-After user authorization, the OAuth provider will redirect to the callback URL:
+All providers implement:
 
 ```
-GET /oauth/callback/{provider}?code=xxx&state=xxx
+OAuthCommonService
 ```
 
-**Example:**
-```bash
-GET /oauth/callback/google?code=4/0AeanS...&state=abc123
+This allows:
+- Uniform invocation
+- Provider-specific behavior
+- Runtime substitution
+
+No controller or business code knows provider details.
+
+---
+
+## 🧬 Template Method — Enforcing OAuth Flow
+
+OAuth flow structure is defined once in:
+
+```
+AbstractOauthService
 ```
 
-**Response:**
-```json
-{
-  "success": true,
-  "user": {
-    "uuid": "user-uuid",
-    "username": "John Doe",
-    "nickname": "johndoe",
-    "avatar": "https://...",
-    "email": "john@example.com",
-    "token": {
-      "accessToken": "ya29.a0AfH6SMC...",
-      "refreshToken": "...",
-      "expireIn": 3599
-    }
-  }
-}
+The algorithm skeleton is fixed:
+
+```
+validateState
+→ obtainAccessToken
+→ obtainUserInfo
+→ convertUser
 ```
 
-### 3. Verify Token
+Subclasses only implement **variable steps**.
 
-Verify an access token stored in Redis:
+This prevents incorrect OAuth implementations.
 
-```bash
-POST /oauth/verify/{provider}?userId={userId}&accessToken={token}
+---
+
+## 🧪 OAuth1 / OAuth2 Separation
+
+Protocol differences are isolated into:
+
+- `AbstractOauth1Service`
+- `AbstractOauth2Service`
+
+Concrete providers simply extend the correct template.
+
+This avoids:
+- Duplicated logic
+- Protocol leakage
+- Complex inheritance chains
+
+---
+
+## 🔐 OAuthStrategyFactory — Strategy Resolution
+
+Provider selection is centralized in:
+
+```
+OAuthStrategyFactory
 ```
 
-**Example:**
-```bash
-curl -X POST "http://localhost:8080/oauth/verify/google?userId=user-uuid&accessToken=ya29.a0AfH6SMC..."
-```
+Responsibilities:
+- Map provider → OAuth service
+- Eliminate conditional logic
+- Enforce Open/Closed Principle
 
-**Response:**
-```json
-{
-  "valid": true
-}
-```
+---
 
-### 4. Revoke Token
+## ♻️ Open/Closed Principle (OCP)
 
-Revoke an access token:
+To add a new OAuth provider:
 
-```bash
-POST /oauth/revoke/{provider}?userId={userId}&accessToken={token}
-```
+1. Add configuration
+2. Create a new service
+3. Extend the appropriate abstract template
+4. Register as Spring bean
 
-**Example:**
-```bash
-curl -X POST "http://localhost:8080/oauth/revoke/google?userId=user-uuid&accessToken=ya29.a0AfH6SMC..."
-```
+❌ No changes to:
+- Controllers
+- Factory
+- Existing providers
+- Framework core
 
-**Response:**
-```json
-{
-  "revoked": true
-}
-```
+---
 
-## Architecture
+## 🎯 Single Responsibility Principle (SRP)
 
-### Strategy Pattern
+| Component | Responsibility |
+|--------|----------------|
+Configuration Properties | Config binding |
+Auto-Configuration | Bean wiring |
+Factory | Strategy resolution |
+Template | OAuth flow |
+Protocol Template | OAuth1 / OAuth2 logic |
+Concrete Service | Provider specifics |
 
-The starter uses the Strategy design pattern to support multiple OAuth providers:
+Each class has **one reason to change**.
 
-- `OAuthStrategy` - Interface defining OAuth operations
-- `GoogleOAuthStrategy` - Google OAuth 2.0 implementation
-- `TwitterOAuthStrategy` - Twitter OAuth 1.0 implementation
+---
 
-### Redis Integration
+## 🚀 What This Starter Is Good For
 
-- **State Verification**: States are stored in Redis with 10-minute expiration to prevent CSRF attacks
-- **Token Storage**: Access tokens are stored in Redis with 24-hour expiration
-- **Token Verification**: Tokens can be verified against Redis storage
+- Spring Boot applications using JustAuth
+- Multi-provider OAuth authentication
+- Internal authentication frameworks
+- Learning reference for framework design
 
-## Programmatic Usage
+---
 
-You can also use the `OAuthService` directly in your code:
+## 🧠 What This Starter Is NOT
 
-```java
-@Autowired
-private OAuthService oAuthService;
+- ❌ A simple OAuth demo
+- ❌ A JustAuth replacement
+- ❌ A Spring Security alternative
 
-// Get authorization URL
-String authUrl = oAuthService.getAuthorizationUrl("google");
+It **extends JustAuth**, it does not replace it.
 
-// Handle callback
-AuthUser user = oAuthService.handleCallback("google", callback, state);
+---
 
-// Verify token
-boolean isValid = oAuthService.verifyToken("google", userId, accessToken);
-```
+## 👤 Author
 
-## Building from Source
+**Sam**  
+Java / Spring Boot Engineer  
+Focus: Framework Design · Spring Boot Starters · Clean Architecture
 
-```bash
-mvn clean install
-```
+---
 
-## License
+## 📄 License
 
-This project is open source and available under the MIT License.
+MIT License
