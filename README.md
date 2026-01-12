@@ -5,8 +5,9 @@ A **Spring Boot starter** that adds **first-class Spring Boot configuration and 
 > **Primary Motivation**  
 > JustAuth is a powerful OAuth library, but **it does not natively support Spring Boot configuration, auto-configuration, or framework-level extension**.  
 >  
-> This project exists to **bridge that gap**.
-
+> This project exists to **bridge that gap**.  
+> 
+> Test it: Choose gitee provider in www.niudiantask.cn
 ---
 
 ## 🎯 Why This Starter Exists (The Real Reason)
