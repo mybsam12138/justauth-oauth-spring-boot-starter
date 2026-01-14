@@ -7,7 +7,7 @@
 
     <groupId>io.github.mybsam12138</groupId>
     <artifactId>justauth-oauth-spring-boot-starter</artifactId>
-    <version>1.0.13</version>
+    <version>1.0.16</version>
     <packaging>jar</packaging>
 
     <name>JustAuth OAuth Spring Boot Starter</name>
@@ -19,6 +19,9 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <spring-boot.version>3.3.6</spring-boot.version>
         <justauth.version>1.16.6</justauth.version>
+        <demo.base.spring-boot.starter>1.0.3</demo.base.spring-boot.starter>
+        <demo.parent>1.0.2</demo.parent>
+        <maven.compiler.version>3.11.0</maven.compiler.version>
     </properties>
 
     <distributionManagement>
@@ -31,9 +34,9 @@
     <dependencyManagement>
         <dependencies>
             <dependency>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-dependencies</artifactId>
-                <version>${spring-boot.version}</version>
+                <groupId>io.github.mybsam12138</groupId>
+                <artifactId>demo-parent</artifactId>
+                <version>${demo.parent}</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
@@ -44,7 +47,7 @@
         <dependency>
             <groupId>io.github.mybsam12138</groupId>
             <artifactId>demo-base-spring-boot-starter</artifactId>
-            <version>1.0.2</version>
+            <version>${demo.base.spring-boot.starter}</version>
         </dependency>
     </dependencies>
 
@@ -53,7 +56,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.11.0</version>
+                <version>${maven.compiler.version}</version>
                 <configuration>
                     <source>${java.version}</source>
                     <target>${java.version}</target>
