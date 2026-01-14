@@ -7,7 +7,7 @@
 
     <groupId>io.github.mybsam12138</groupId>
     <artifactId>justauth-oauth-spring-boot-starter</artifactId>
-    <version>1.0.12</version>
+    <version>1.0.13</version>
     <packaging>jar</packaging>
 
     <name>JustAuth OAuth Spring Boot Starter</name>
