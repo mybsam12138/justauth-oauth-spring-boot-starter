@@ -44,7 +44,7 @@
         <dependency>
             <groupId>io.github.mybsam12138</groupId>
             <artifactId>demo-base-spring-boot-starter</artifactId>
-            <version>1.0.1</version>
+            <version>1.0.2</version>
         </dependency>
     </dependencies>
 
