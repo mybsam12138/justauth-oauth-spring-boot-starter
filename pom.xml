@@ -4,24 +4,20 @@
         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
          http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>io.github.mybsam12138</groupId>
+        <artifactId>demo-parent</artifactId>
+        <version>1.0.5</version>
+    </parent>
 
-    <groupId>io.github.mybsam12138</groupId>
     <artifactId>justauth-oauth-spring-boot-starter</artifactId>
-    <version>1.0.17</version>
+    <version>1.0.18</version>
     <packaging>jar</packaging>
 
     <name>JustAuth OAuth Spring Boot Starter</name>
     <description>Spring Boot starter for JustAuth-based OAuth login (Google, Twitter)</description>
-
     <properties>
-        <java.version>21</java.version>
-        <maven.compiler.release>21</maven.compiler.release>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <spring-boot.version>3.3.6</spring-boot.version>
-        <justauth.version>1.16.6</justauth.version>
-        <demo.base.spring-boot.starter>1.0.4</demo.base.spring-boot.starter>
-        <demo.parent>1.0.2</demo.parent>
-        <maven.compiler.version>3.11.0</maven.compiler.version>
+        <demo.base.spring-boot.starter>1.0.8</demo.base.spring-boot.starter>
     </properties>
 
     <distributionManagement>
@@ -30,18 +26,6 @@
             <url>https://maven.pkg.github.com/mybsam12138/justauth-oauth-spring-boot-starter</url>
         </repository>
     </distributionManagement>
-
-    <dependencyManagement>
-        <dependencies>
-            <dependency>
-                <groupId>io.github.mybsam12138</groupId>
-                <artifactId>demo-parent</artifactId>
-                <version>${demo.parent}</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-        </dependencies>
-    </dependencyManagement>
 
     <dependencies>
         <dependency>
@@ -60,20 +44,10 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>${maven.compiler.version}</version>
-                <configuration>
-                    <source>${java.version}</source>
-                    <target>${java.version}</target>
-                    <encoding>UTF-8</encoding>
-                    <compilerArgs>
-                        <arg>-parameters</arg>
-                    </compilerArgs>
-                </configuration>
             </plugin>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
-                <version>${spring-boot.version}</version>
             </plugin>
         </plugins>
     </build>
