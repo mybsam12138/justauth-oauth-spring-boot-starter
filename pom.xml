@@ -19,7 +19,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <spring-boot.version>3.3.6</spring-boot.version>
         <justauth.version>1.16.6</justauth.version>
-        <demo.base.spring-boot.starter>1.0.3</demo.base.spring-boot.starter>
+        <demo.base.spring-boot.starter>1.0.4</demo.base.spring-boot.starter>
         <demo.parent>1.0.2</demo.parent>
         <maven.compiler.version>3.11.0</maven.compiler.version>
     </properties>
@@ -48,6 +48,10 @@
             <groupId>io.github.mybsam12138</groupId>
             <artifactId>demo-base-spring-boot-starter</artifactId>
             <version>${demo.base.spring-boot.starter}</version>
+        </dependency>
+        <dependency>
+            <groupId>me.zhyd.oauth</groupId>
+            <artifactId>JustAuth</artifactId>
         </dependency>
     </dependencies>
 
